@@ -1,0 +1,15 @@
+{
+  "author": "Conner Petzold <conner@storify.com>",
+  "name": "storify-bot",
+  "version": "0.0.0",
+  "repository": {
+    "url": ""
+  },
+  "engines": {
+    "node": "v0.4.9"
+  },
+  "dependencies": {
+    "irc": "0.1.2",
+    "github": "0.0.6"
+  }
+}
