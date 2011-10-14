@@ -9,7 +9,7 @@
     "node": "v0.4.9"
   },
   "dependencies": {
-    "irc": "0.1.2",
+    "irc": "0.2.1",
     "github": "0.0.6"
   }
 }
