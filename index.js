@@ -54,7 +54,7 @@ var bot = new irc.Client(config.server, config.nickname, {
 config.channels.forEach(function (channel) {
   bot.on('join' + channel, function (who) {
     // avoid auto pwning
-    if (who != options.nickname) {
+    if (who != config.nickname) {
       bot.say(channel, who + ': pwned!');
     }
   });
