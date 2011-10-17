@@ -65,7 +65,7 @@ config.channels.forEach(function (channel) {
  */
 
 var commands = {}
-  , cmdReg = new RegExp('^(' + config.nickname + ':?)?( *)!([^ ]+)', 'i')
+  , cmdReg = new RegExp('^((' + config.nickname + ':?)? *!([^ ]+) *)', 'i')
 
 fs.readdirSync('./commands').forEach(function (file) {
   var cmd = require('./commands/' + file);
