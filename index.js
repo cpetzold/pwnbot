@@ -66,7 +66,11 @@ fs.readdirSync('./commands').forEach(function (file) {
 bot.on('message', function (from, to, message) {
   // test for a command
   var match = message.match(cmdReg)
-    , cmd = match[3]
+  if (!match) {
+    return;
+  }
+  
+  var cmd = match[3]
 
   if (commands[cmd]) {
     if (config.debug) {
