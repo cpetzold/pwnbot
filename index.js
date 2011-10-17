@@ -30,6 +30,15 @@ try {
   };
 }
 
+/**
+ * Initialize bot.
+ */
+
+var bot = new irc.Client(config.server, config.nickname, {
+    channels: config.channels
+  , debug: 'development' == env ? true : config.debug
+});
+
 bot.on('join#pwn', function(who) {
   bot.say('#pwn', who + ': pwned!');
 });
