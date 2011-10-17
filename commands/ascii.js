@@ -29,7 +29,7 @@ function write (text, font, fn) {
 
 function ascii (bot) {
 
-  return function ascii (text, options, say, user, channel) {
+  return function ascii (text, say, options, user, channel) {
     write(text, options.font, say)
   };
 

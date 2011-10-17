@@ -93,8 +93,8 @@ bot.on('message', function (from, to, message) {
       msg = msg.replace(opt[0], '');
     }
 
-    commands[cmd](msg, options, function (msg) {
+    commands[cmd](msg, function (msg) {
       bot.say(to, msg);
-    }, from, to);
+    }, options, from, to);
   }
 });
