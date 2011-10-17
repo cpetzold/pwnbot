@@ -59,3 +59,15 @@ config.channels.forEach(function (channel) {
     }
   });
 });
+
+/**
+ * Register commands.
+ */
+
+var commands = {}
+  , cmdReg = new RegExp('^(' + config.nickname + ':?)?( *)!([^ ]+)', 'i')
+
+fs.readdirSync('./commands').forEach(function (file) {
+  var cmd = require('./commands/' + file);
+  commands[cmd.name] = cmd;
+});
