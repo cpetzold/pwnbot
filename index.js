@@ -69,5 +69,6 @@ var commands = {}
 
 fs.readdirSync('./commands').forEach(function (file) {
   var cmd = require('./commands/' + file);
-  commands[cmd.name] = cmd;
+  commands[cmd.name] = cmd(bot);
+});
 });
