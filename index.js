@@ -31,12 +31,20 @@ try {
 }
 
 /**
+ * Override debug for dev.
+ */
+
+if ('development' == env) {
+  config.debug = true;
+}
+
+/**
  * Initialize bot.
  */
 
 var bot = new irc.Client(config.server, config.nickname, {
     channels: config.channels
-  , debug: 'development' == env ? true : config.debug
+  , debug: config.debug
 });
 
 /**
