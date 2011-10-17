@@ -5,8 +5,6 @@
 
 var irc = require('irc')
   , fs = require('fs')
-  , opt = require('optimist')
-  , ascii = require('asciimo')
 
 /**
  * Environment.
