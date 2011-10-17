@@ -1,3 +1,8 @@
+
+/**
+ * Module dependencies.
+ */
+
 var irc = require('irc')
   , bot = new irc.Client('irc.the0th.com', 'pwnbot', {
       channels: ['#pwn']
