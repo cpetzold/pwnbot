@@ -20,7 +20,10 @@ module.exports = ascii;
  */
 
 function write (text, font, fn) {
-  asciimo.Figlet.write(text, font || 'banner', fn);
+  var font = font || 'banner';
+  font = font.toLowerCase();
+  font = font[0].toUpperCase() + font.slice(1);
+  asciimo.Figlet.write(text, font, fn);
 }
 
 /**
