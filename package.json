@@ -9,7 +9,8 @@
     "node": "v0.4.9"
   },
   "dependencies": {
-    "irc": "0.2.1",
-    "github": "0.0.6"
+    "irc": "0.2.x",
+    "optimist": "0.2.x",
+    "asciimo": "0.3.x"
   }
 }
