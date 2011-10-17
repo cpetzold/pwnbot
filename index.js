@@ -71,4 +71,30 @@ fs.readdirSync('./commands').forEach(function (file) {
   var cmd = require('./commands/' + file);
   commands[cmd.name] = cmd(bot);
 });
+
+bot.on('message', function (from, to, message) {
+  // test for a command
+  var match = message.match(cmdReg)
+    , cmd = match[3]
+
+  if (commands[cmd]) {
+    if (config.debug) {
+      console.error('\033[90mgot command - ' + cmd + '\033[39m');
+    }
+
+    // get raw message
+    var msg = message.replace(match[0], '');
+
+    // parse options
+    var options = {}, opt;
+
+    while(opt = msg.match(/([^:]+):((\"([^\"]+)\")|([^ ]+)) */)){
+      options[opt[1]] = opt[5] || opt[4];
+      msg = msg.replace(opt[0], '');
+    }
+
+    commands[cmd](msg, options, function (msg) {
+      bot.say(to, msg);
+    }, from, to);
+  }
 });
