@@ -5,6 +5,8 @@
 
 var irc = require('irc')
   , fs = require('fs')
+  , opt = require('optimist')
+  , ascii = require('asciimo')
 
 /**
  * Environment.
@@ -27,6 +29,7 @@ try {
     , nickname: 'pwnbot'
     , channels: ['#pwn']
     , debug: true
+    , prefix: '!'
   };
 }
 
@@ -45,19 +48,6 @@ if ('development' == env) {
 var bot = new irc.Client(config.server, config.nickname, {
     channels: config.channels
   , debug: config.debug
-});
-
-/**
- * Auto-Pwn all channels the bot is connected to.
- */
-
-config.channels.forEach(function (channel) {
-  bot.on('join' + channel, function (who) {
-    // avoid auto pwning
-    if (who != config.nickname) {
-      bot.say(channel, who + ': pwned!');
-    }
-  });
 });
 
 /**
