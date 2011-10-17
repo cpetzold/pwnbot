@@ -4,8 +4,13 @@
  */
 
 var irc = require('irc')
-  , bot = new irc.Client('irc.the0th.com', 'pwnbot', {
-      channels: ['#pwn']
+  , fs = require('fs')
+
+/**
+ * Environment.
+ */
+
+var env = process.env.NODE_ENV || 'development';
     , debug: true
   });
 
