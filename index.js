@@ -39,7 +39,12 @@ var bot = new irc.Client(config.server, config.nickname, {
   , debug: 'development' == env ? true : config.debug
 });
 
-bot.on('join#pwn', function(who) {
-  bot.say('#pwn', who + ': pwned!');
-});
+/**
+ * Auto-Pwn all channels the bot is connected to.
+ */
 
+config.channels.forEach(function (channel) {
+  bot.on('join' + channel, function (who) {
+    bot.say(channel, who + ': pwned!');
+  });
+});
