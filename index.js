@@ -47,6 +47,7 @@ var bot = new irc.Client(config.server, config.nickname, {
     channels: config.channels
   , debug: config.debug
 });
+bot.config = config;
 
 /**
  * Register commands.
@@ -56,8 +57,10 @@ var commands = {}
   , cmdReg = new RegExp('^((' + config.nickname + ':?)? *!([^ ]+) *)', 'i')
 
 fs.readdirSync('./commands').forEach(function (file) {
-  var cmd = require('./commands/' + file);
-  commands[cmd.name] = cmd(bot);
+  if (file.search(/js$/) != -1) {
+    var cmd = require('./commands/' + file);
+    commands[cmd.name] = cmd(bot);
+  }
 });
 
 bot.on('message', function (from, to, message) {
