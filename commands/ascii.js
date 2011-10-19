@@ -33,7 +33,14 @@ function write (text, font, fn) {
 function ascii (bot) {
 
   return function ascii (text, say, options, user, channel) {
-    write(text, options.font, say)
+    write(text, options.font, function(out) {
+      if (options.color && ''.irc[options.color]) {
+        out = out.split('\n').map(function(s) {
+          return s.irc[options.color]();
+        }).join('\n');
+      }
+      say(out);
+    });
   };
 
 };

@@ -5,6 +5,7 @@
 
 var irc = require('irc')
   , fs = require('fs')
+  , c = require('irc-colors').global()
 
 /**
  * Environment.
