@@ -12,6 +12,25 @@ var request = require('request')
 
 module.exports = locate;
 
+function checkGeo(element, index, array){
+  if(element.geo && !message){
+    
+    message = 'Last location for @' + text + ': ';
+    
+    //reverse geocode lat lng
+    request({uri:'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + element.geo.coordinates[0] + ',' + element.geo.coordinates[1] + '&sensor=false'}, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var location = JSON.parse(body);
+        
+        message += location.results[0].formatted_address;
+        message += ' ' + timeago(element.created_at);
+        
+        say(message);
+      }
+    });
+  }
+}
+
 /**
  * define command.
  */
@@ -27,28 +46,7 @@ function locate (bot) {
         
         if(tweets.results){
           //there is at least one tweet so loop through all tweets and look for the most recent one with geo info
-          
-          for(var i=0;i<tweets.results.length;i++){
-            
-            if(tweets.results[i].geo){
-              
-              message = 'Last location for @' + text + ': ';
-              
-              //reverse geocode lat lng
-              request({uri:'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + tweets.results[i].geo.coordinates[0] + ',' + tweets.results[i].geo.coordinates[1] + '&sensor=false'}, function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-                  var location = JSON.parse(body);
-                  
-                  message += location.results[0].formatted_address;
-                  message += ' ' + timeago(tweets.results[i].created_at);
-                  
-                  say(message);
-                }
-              });
-              
-              break;
-            }
-          }
+          tweets.results.forEach(checkGeo);
           
           if(!message){
             say(text + ' doesn\'t have any geolocated tweets');
