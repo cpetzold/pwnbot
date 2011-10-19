@@ -39,7 +39,7 @@ function locate (bot) {
     }
     
     var message = '';
-    var username = text.toLowerCase();
+    var username = text.replace('@','').toLowerCase();
     
     request({uri:'http://search.twitter.com/search.json?q=from:' + username + '&rpp=100', json:true}, function (error, response, body) {
       try{
@@ -48,11 +48,11 @@ function locate (bot) {
           body.results.forEach(checkGeo);
           
           if(!message){
-            say(username + ' doesn\'t have any geolocated tweets');
+            say('@' + username + ' doesn\'t have any geolocated tweets');
           }
           
         } else {
-          say(username + ' not found');
+          say('@' + username + ' not found');
         }
       } catch (e) {
         console.error('\033[90m' + e + '\033[39m');
