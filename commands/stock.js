@@ -27,7 +27,7 @@ function stock (bot) {
         var results = body.replace(/"/g, '').split(',');
         var prices = results[0].replace(/<.*?>/g, '').split('-');
         
-        if(price != '0.00'){
+        if(prices[1].trim() != '0.00'){
           say('Price for ' + symbol + ' on ' + prices[0].trim() + ': $' + prices[1].trim());
         } else {
           say('Invalid Symbol ' + symbol);
