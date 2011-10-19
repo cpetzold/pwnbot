@@ -41,6 +41,13 @@ if ('development' == env) {
 }
 
 /**
+ * Don't crash on uncaught exception
+ */
+process.on('uncaughtException', function(e) {
+  console.error('Exception %s: %s', e.type, e.stack || e.message);
+});
+
+/**
  * Initialize bot.
  */
 
