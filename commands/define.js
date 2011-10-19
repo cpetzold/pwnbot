@@ -18,6 +18,19 @@ module.exports = define;
 var numRes = 3;
 
 /**
+ * Dictionary source mapping
+ */
+
+var dictionaries = {
+    ahd: 'American Heritage Dictionary'
+  , century: 'Century Dictionary'
+  , wiktionary: 'Wiktionary'
+  , webster: 'Webster\'s Dictionary'
+  , wordnet: 'WordNet'
+};
+dictionaries['ahd-legacy'] = dictionaries.ahd;
+
+/**
  * define command.
  */
 
@@ -30,19 +43,34 @@ function define (bot) {
     if (!wn) { 
       return;
     }
+    var words = text.trim().split(' ');
+    console.log(words);
 
-    wn.definitions(text, function(e, defs) {
-      var message = ''
-        , n = options.n ? Math.min(options.n, defs.length) : Math.min(defs.length, numRes);
+    words.forEach(function(word) {
+      wn.definitions(word, function(e, defs) {
+        var message = word.irc.bold.silver() + ': '
+          , n = options.n ? Math.min(options.n, defs.length) : Math.min(defs.length, numRes);
   
-      for (var i = 0; i < n; i++) {
-        def = defs[i];
-        message += ((i + 1) + '. ').irc.gray();
-        message += def.partOfSpeech.irc.green() + ' - '.irc.gray();
-        message += def.text.irc.cyan() + '\n';
-      }
-  
-      say(message);
+        console.log(e, defs);
+
+        if (e || !defs.length) {
+          message += 'No definitions found'.irc.gray();
+        } else {
+          message += '\n';
+          for (var i = 0; i < n; i++) {
+            def = defs[i];
+            message += ((i + 1) + '. ').irc.gray();
+            message += def.partOfSpeech.irc.green() + ' - '.irc.gray();
+            message += def.text.irc.cyan();
+            message += (' (' + dictionaries[def.sourceDictionary] + ')').irc.gray();
+            message += '\n';
+          }
+        }
+
+        console.log(message);
+    
+        say(message);
+      });
     });
   };
 
