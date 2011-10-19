@@ -37,9 +37,9 @@ function define (bot) {
   
       for (var i = 0; i < n; i++) {
         def = defs[i];
-        message += (i + 1) + '. ';
-        message += def.partOfSpeech + ' - ';
-        message += def.text + '\n';
+        message += ((i + 1) + '. ').irc.gray();
+        message += def.partOfSpeech.irc.green() + ' - '.irc.gray();
+        message += def.text.irc.cyan() + '\n';
       }
   
       say(message);
