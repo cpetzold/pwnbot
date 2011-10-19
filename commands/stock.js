@@ -35,6 +35,7 @@ function stock (bot) {
           say('Invalid Symbol ' + symbol);
         }
       } catch(e) {
+        console.error('\033[90m' + e + '\033[39m');
         say('Unable to retreive prices from Yahoo');
       }
       
