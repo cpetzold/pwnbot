@@ -20,7 +20,7 @@ function weather (bot) {
   
   return function weather(text, say, options, user, channel) {
     
-    request({uri:'http://www.google.com/ig/api?weather=' + text}, function (error, response, body) {
+    request({uri:'http://www.google.com/ig/api?weather=' + text.replace(' ', '+')}, function (error, response, body) {
       // Result is XML
       try{
         var parser = new xml2js.Parser();
