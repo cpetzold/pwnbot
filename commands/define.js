@@ -55,59 +55,59 @@ function define (bot) {
     if (!wn) { 
       return;
     }
-    var words = text.trim().split(' ');
-    console.log(words);
+    var word = text.trim();
+    console.log(word);
 
-    words.forEach(function(word) {
-      wn.definitions(word, function(e, defs) {
-        var message = word.irc.bold.silver() + ': '
-          , n = options.n ? Math.min(options.n, defs.length) : Math.min(defs.length, numRes);
+    wn.definitions(word, function(e, defs) {
+      
+      var message = word.irc.bold.silver() + ': ';
 
-        if (e || !defs.length) {
-          //check urban dictionary
-          request({uri:'http://www.urbandictionary.com/iphone/search/define?term=' + word, json:true}, function (error, response, body) {
-
+      if (e || !defs.length) {
+        //check urban dictionary
+        request({uri:'http://www.urbandictionary.com/iphone/search/define?term=' + encodeURIComponent(word), json:true}, function (error, response, body) {
+          
+          try{
             if(body.result_type == 'no_results'){
               message += 'No definitions found'.irc.gray();
-              
+            
             } else {
-              try{
-                n = options.n ? Math.min(options.n, body.list.length) : Math.min(body.list.length, numRes);
-              
+            
+               var n = options.n ? Math.min(options.n, body.list.length) : Math.min(body.list.length, numRes);
+          
+              message += '\n';
+              for (var i = 0; i < n; i++) {
+                def = body.list[i];
+                message += ((i + 1) + '. ').irc.gray();
+                message += truncate(def.definition);
+                message += (' (UrbanDictionary.com) ');
+                message += '\n\t';
+                message += ('\u0016Example: ' + truncate(def.example));
                 message += '\n';
-                for (var i = 0; i < n; i++) {
-                  def = body.list[i];
-                  message += ((i + 1) + '. ').irc.gray();
-                  message += truncate(def.definition);
-                  message += (' (UrbanDictionary.com) ');
-                  message += '\n\t';
-                  message += ('\u0016Example: ' + truncate(def.example));
-                  message += '\n';
-                }
-              
-              } catch(e) {
-                console.error('\033[90m' + e + '\033[39m');
-                message += 'Error';
               }
             } 
-            
-            say(message);
-          });
-          
-        } else {
-          message += '\n';
-          for (var i = 0; i < n; i++) {
-            def = defs[i];
-            message += ((i + 1) + '. ').irc.gray();
-            message += def.partOfSpeech.irc.green() + ' - '.irc.gray();
-            message += def.text.irc.cyan();
-            message += (' (' + dictionaries[def.sourceDictionary] + ')').irc.gray();
-            message += '\n';
+          } catch(e) {
+            console.error('\033[90m' + e + '\033[39m');
+            message += 'Error';
           }
+
           say(message);
-        }
+        });
         
-      });
+      } else {
+        var n = options.n ? Math.min(options.n, defs.length) : Math.min(defs.length, numRes);
+        
+        message += '\n';
+        for (var i = 0; i < n; i++) {
+          def = defs[i];
+          message += ((i + 1) + '. ').irc.gray();
+          message += def.partOfSpeech.irc.green() + ' - '.irc.gray();
+          message += def.text.irc.cyan();
+          message += (' (' + dictionaries[def.sourceDictionary] + ')').irc.gray();
+          message += '\n';
+        }
+        say(message);
+      }
+        
     });
   };
 
