@@ -4,6 +4,7 @@
  */
 
 var Wordnik = require('wordnik')
+  , request = require('request');
 
 /**
  * Module exports.
@@ -30,6 +31,17 @@ var dictionaries = {
 };
 dictionaries['ahd-legacy'] = dictionaries.ahd;
 
+function truncate(def){
+  def = def.replace(/(\r\n|\n|\r)/gm,' ');
+  var maxLength = 350;
+  if(def.length > maxLength){
+    return def.substring(0, maxLength) + '...';
+  } else {
+    return def;
+  }
+}
+
+
 /**
  * define command.
  */
@@ -50,11 +62,38 @@ function define (bot) {
       wn.definitions(word, function(e, defs) {
         var message = word.irc.bold.silver() + ': '
           , n = options.n ? Math.min(options.n, defs.length) : Math.min(defs.length, numRes);
-  
-        console.log(e, defs);
 
         if (e || !defs.length) {
-          message += 'No definitions found'.irc.gray();
+          //check urban dictionary
+          request({uri:'http://www.urbandictionary.com/iphone/search/define?term=' + word, json:true}, function (error, response, body) {
+
+            if(body.result_type == 'no_results'){
+              message += 'No definitions found'.irc.gray();
+              
+            } else {
+              try{
+                n = options.n ? Math.min(options.n, body.list.length) : Math.min(body.list.length, numRes);
+              
+                message += '\n';
+                for (var i = 0; i < n; i++) {
+                  def = body.list[i];
+                  message += ((i + 1) + '. ').irc.gray();
+                  message += truncate(def.definition);
+                  message += (' (UrbanDictionary.com) ');
+                  message += '\n\t';
+                  message += ('\u0016Example: ' + truncate(def.example));
+                  message += '\n';
+                }
+              
+              } catch(e) {
+                console.error('\033[90m' + e + '\033[39m');
+                message += 'Error';
+              }
+            } 
+            
+            say(message);
+          });
+          
         } else {
           message += '\n';
           for (var i = 0; i < n; i++) {
@@ -65,11 +104,9 @@ function define (bot) {
             message += (' (' + dictionaries[def.sourceDictionary] + ')').irc.gray();
             message += '\n';
           }
+          say(message);
         }
-
-        console.log(message);
-    
-        say(message);
+        
       });
     });
   };
