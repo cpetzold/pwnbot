@@ -19,6 +19,13 @@ function pwn (bot) {
       if(args.length > 1){
         username = args[0];
         var pwnQuantity = args[1];
+        var maxPwnage = 28;
+        if(pwnQuantity > maxPwnage){
+          say('Warning: Pwn limit is ' + maxPwnage);
+          pwnQuantity = maxPwnage;
+        }
+        
+        
         var pwnInterval = setInterval(pwnUser, 1000); 
       } else {
         pwnUser();
