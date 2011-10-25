@@ -11,22 +11,39 @@ module.exports = pwn;
 function pwn (bot) {
   
   return function pwn (text, say, options, user, channel) {
-    var usernames = text.split(' ');
+    var usernames = [];
+    if(text){
+      usernames = text.split(' ');
+    } else if(options){
+  
+      for(var i in options){
+        usernames.push(i);
+      }
+      
+    }
+    
     usernames.forEach(function(username, index, array){
       //see if a pwn quantity is present
-      // example !pwn gullermo|10
-      args = username.split('|');
-      if(args.length > 1){
-        username = args[0];
-        var pwnQuantity = args[1];
+      // example !pwn gullermo:10
+      if(options[username] > 1){
+        var pwnQuantity = options[username];
         var maxPwnage = 28;
         if(pwnQuantity > maxPwnage){
           say('Warning: Pwn limit is ' + maxPwnage);
           pwnQuantity = maxPwnage;
         }
         
+        var pwnInterval;
+        //make sure user exists before trying to pwn
+        bot.whois(username, function(info, err){
+          if(err || !info){
+              message = username + ' isn\'t on this channel.  Unable to pwn.';
+          } else {
+            pwnInterval = setInterval(pwnUser, 1000);
+          }
+        });
         
-        var pwnInterval = setInterval(pwnUser, 1000); 
+        
       } else {
         pwnUser();
       }
@@ -35,37 +52,44 @@ function pwn (bot) {
       
       function pwnUser(){
         //check if user is in room
-        bot.whois(username, function(info){
-          var message = '';
-          console.log(info);
-      
-          if(!info){
-            message = username + ' isn\'t on this channel.  Unable to pwn.';
+        var message = '';
         
-          } else {
-        
-            if(username == user){
-              //check that user isn't the same as self
-              message = username + ' pwned themselves.';
+        try{
+          bot.whois(username, function(info, err){
           
-            } else if(username == bot.config.nickname){
-              //you can't pwn the pwnbot
-              message = 'You can\'t pwn the pwnbot.';
-          
+            if(err || !info){
+                message = username + ' isn\'t on this channel.  Unable to pwn.';
+
             } else {
-              //try to pwn the user
-              message = info.nick + ' (' + info.realname + ') has been pwned.';
-          
+
+              if(username == user){
+                //check that user isn't the same as self
+                message = username + ' pwned themselves.';
+
+              } else if(username == bot.config.nickname){
+                //you can't pwn the pwnbot
+                message = 'You can\'t pwn the pwnbot.';
+
+              } else {
+                //try to pwn the user
+                message = info.nick + ' (' + info.realname + ') has been pwned.';
+
+              }
+
             }
-       
-          }
-          say(message);
-          pwnCount++;
-          if(pwnCount >= pwnQuantity){
-            clearInterval(pwnInterval);
-          }
+          
+            say(message);
+            pwnCount++;
+            if(pwnCount >= pwnQuantity){
+              clearInterval(pwnInterval);
+            }
       
-        });
+          });
+        } catch(e) {
+          message = username + ' isn\'t on this channel.  Unable to pwn.';
+          say(message);
+          clearInterval(pwnInterval);
+        }
         
       }
       
