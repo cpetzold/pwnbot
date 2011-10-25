@@ -64,7 +64,7 @@ function pwn (bot) {
 
               if(username == user){
                 //check that user isn't the same as self
-                message = username + ' pwned themselves.';
+                message = username + ' ' + 'pwned'.irc.red() + ' themselves.';
 
               } else if(username == bot.config.nickname){
                 //you can't pwn the pwnbot
@@ -72,7 +72,7 @@ function pwn (bot) {
 
               } else {
                 //try to pwn the user
-                message = info.nick + ' (' + info.realname + ') has been pwned.';
+                message = info.nick + ' (' + info.realname.irc.gray() + ') has been ' + 'pwned'.irc.red() + '.';
 
               }
 
