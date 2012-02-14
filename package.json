@@ -12,7 +12,7 @@
         "irc": "0.2.1"
       , "irc-colors": "1.0.1"
       , "asciimo": "0.3.1"
-      , "wordnik": "0.0.1"
+      , "wordnik": "0.0.x"
       , "request": "2.1.1"
       , "timeago": "0.0.2"
       , "xml2js": "0.1.11"
