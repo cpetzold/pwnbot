@@ -51,10 +51,7 @@ process.on('uncaughtException', function(e) {
  * Initialize bot.
  */
 
-var bot = new irc.Client(config.server, config.nickname, {
-    channels: config.channels
-  , debug: config.debug
-});
+var bot = new irc.Client(config.server, config.nickname, config);
 bot.config = config;
 
 /**
