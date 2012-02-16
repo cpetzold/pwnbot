@@ -1,20 +1,26 @@
 {
-    "author": "Conner Petzold <conner@storify.com>"
-  , "name": "storify-bot"
-  , "version": "0.0.0"
-  , "repository": {
-        "url": ""
-    }
-  , "engines": {
-        "node": "v0.4.9"
-    }
+    "name": "pwnbot"
+  , "version": "0.0.1"
+  , "author": "Conner Petzold <cpetzold@gmail.com>"
+  , "contributors": [
+        { "name": "Guillermo Rauch", "email": "rauchg@gmail.com" }
+      , { "name": "Brendan Nee", "email": "brendan.nee@gmail.com" }
+    ]
+  , "keywords": ["irc", "bot", "pwn"]
+  , "repository": "git://github.com/cpetzold/pwnbot"
+  , "engines": { "node": "> v0.4.x < 0.7.0" }
+  , "main": "./index.js"
+  , "bin": { "pwnd": "./bin/pwnd" }
   , "dependencies": {
-        "irc": "0.2.1"
-      , "irc-colors": "1.0.1"
-      , "asciimo": "0.3.1"
+        "irc": "0.2.x"
+      , "irc-colors": "1.0.x"
+      , "optimist": "0.3.x"
+      , "colors": "0.6.x"
+      , "logule": "0.5.x"
+      , "asciimo": "0.3.x"
       , "wordnik": "0.0.x"
-      , "request": "2.1.1"
-      , "timeago": "0.0.2"
-      , "xml2js": "0.1.11"
+      , "request": "2.1.x"
+      , "timeago": "0.0.x"
+      , "xml2js": "0.1.x"
     }
 }

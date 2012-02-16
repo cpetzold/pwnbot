@@ -1,0 +1,78 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var fs = require('fs')
+  , optimist = require('optimist')
+  , colors = require('colors')
+  , log = require('logule')
+  , pwn = require('../');
+
+/**
+ * Set arguments and help/usage
+ */
+
+var opts = optimist
+    .usage('\nRuns the pwnbot daemon'.underline.blue + '\n' + 'Usage: $0'.grey)
+    .options('h', {
+        describe: 'Displays this message'
+      , alias: 'help'
+      , boolean: true
+    })
+    .options('c', {
+        describe: 'Path to bot config json file'
+      , alias: 'config'
+      , default: './config.json'
+    });
+
+var argv = opts.argv;
+
+if (argv.h) {
+  opts.showHelp();
+  process.exit();
+} 
+
+/**
+ * Load up configuration.
+ */
+
+var config, cf;
+
+try {
+  cf = fs.readFileSync(argv.c)
+} catch (e) {
+  fatal('Unable to read ' + argv.c);
+}
+
+try {
+  config = JSON.parse(cf);
+} catch (e) {
+  fatal('Unable to parse config');
+}
+
+/**
+ * Create the bot and connect
+ */
+
+var bot = pwn.createBot(config);
+bot.connect();
+
+/**
+ * Fatal error 
+ */
+ 
+function fatal(msg) {
+  log.error(msg.red);
+  log.info('Exiting');
+  process.exit(1);
+}
+
+/**
+ * Don't crash on uncaught exception
+ */
+ 
+process.on('uncaughtException', function(e) {
+  console.error('Exception %s: %s', e.type, e.stack || e.message);
+});
